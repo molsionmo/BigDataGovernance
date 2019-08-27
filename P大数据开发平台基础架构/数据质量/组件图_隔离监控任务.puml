@@ -1,0 +1,29 @@
+@startuml 数据质量组件图-隔离模式
+
+interface 配置数据质量规则 as configRule
+
+package "规则引擎" {
+    [规则查询组件]
+    [规则存储组件]
+}
+
+package "监控运行引擎" {
+    frame "Runtime"{
+        [监控逻辑]
+    }
+}
+
+node "异步队列"
+
+package "质量监控组件" {
+    [告警抽象组件]
+    [阻断抽象组件]
+    [质量事件监控组件]
+}
+
+configRule --> 规则存储组件
+规则查询组件 --> Runtime : 监控逻辑
+监控逻辑 ..> 异步队列 : 不符规则数据消息
+质量事件监控组件 ..> 异步队列 : consume
+
+@enduml
