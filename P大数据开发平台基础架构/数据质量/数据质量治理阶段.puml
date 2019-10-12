@@ -1,0 +1,25 @@
+@startuml
+
+skinparam activity {
+  BarColor SaddleBrown
+  BorderColor Peru
+  FontColor<< Begin >> green
+}
+
+(*)  -right-> "数据收集-质量检查" 
+If "质量检查通过" then
+--> [NO] "过滤数据与提交质量报告"
+else
+--> [YES] "数据收集与存储" << Begin >>
+Endif
+-right-> "数据计算与应用" << Begin >>
+--> "数据计算-数据质量检查"
+If "数据计算-质量规则通过" then
+--> [YES] "执行数据计算"
+-->(*)
+else 
+--> [NO] "过滤数据或停止计算任务"
+Endif
+-->(*)
+
+@enduml
